@@ -1,0 +1,7 @@
+.header-background {
+    background-image: url('fundo.jpg'); /* Substitua 'fundo.jpg' pelo caminho da sua imagem */
+    background-size: cover;
+    background-position: center;
+    color: white;
+  }
+  

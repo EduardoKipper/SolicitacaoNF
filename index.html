@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Formulário de Nota Fiscal</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header class="header-background text-center">
+        <div class="container">
+          <div class="row justify-content-center align-items-center">
+              <img src="logo.png" alt="Logo da Rede Andrade" class="img-fluid">
+          </div>
+        </div>
+      </header>
+<div class="container">
+  <h1 class="mt-5 mb-5">Solicitação de Nota Fiscal</h1>
+  
+  <h3 class="mt-5 mb-3">Dados do Hotel</h3>
+  <form>
+    <div class="form-group">
+      <label for="hotel">Hotel:</label>
+      <input type="text" class="form-control" id="hotel" placeholder="Digite o hotel">
+    </div>
+  </form>
+  
+  <h3 class="mt-5 mb-5">Dados do tomador de serviços</h3>
+  <form>
+    <div class="form-group">
+      <label for="cpf">CPF/CNPJ:</label>
+      <input type="text" class="form-control" id="cpf" placeholder="Digite o CPF ou CNPJ">
+    </div>
+    <div class="form-group">
+      <label for="nome">Razão social:</label>
+      <input type="text" class="form-control" id="razao" placeholder="Digite a razão social">
+    </div>
+    <div class="form-group">
+        <label for="endereco">CEP:</label>
+        <input type="text" class="form-control" id="cep" placeholder="Digite o CEP">
+      </div>
+    <div class="form-group">
+      <label for="endereco">Endereço:</label>
+      <input type="text" class="form-control" id="endereco" placeholder="Digite o endereço">
+    </div>
+    <div class="form-group">
+      <label for="cidade">Cidade:</label>
+      <input type="text" class="form-control" id="cidade" placeholder="Digite o cidade">
+    </div>
+    <div class="form-group">
+      <label for="estado">Estado:</label>
+      <input type="text" class="form-control" id="estado" placeholder="Digite o estado">
+    </div>
+  </form>
+
+  <h3 class="mt-5 mb-3">Dados da Hospedagem</h3>
+  <form id="hospedagem-form">
+    <div class="hospedagem">
+      <div class="form-group">
+        <label for="estada">Estada:</label>
+        <input type="text" class="form-control" name="estada[]" placeholder="Digite a Estada">
+      </div>
+      <div class="form-group">
+        <label for="nome-hospede">Nome do Hóspede:</label>
+        <input type="text" class="form-control" name="nome-hospede[]" placeholder="Digite o nome do hóspede">
+      </div>
+      <div class="form-group">
+        <label for="cpf-hospede">CPF do Hóspede:</label>
+        <input type="text" class="form-control" name="cpf-hospede[]" placeholder="Digite o CPF do hóspede">
+      </div>
+      <div class="form-row">
+        <div class="form-group col-md-6">
+          <label for="data-checkin">Data de Check-in:</label>
+          <input type="date" class="form-control" name="data-checkin[]">
+        </div>
+        <div class="form-group col-md-6">
+          <label for="data-checkout">Data de Check-out:</label>
+          <input type="date" class="form-control" name="data-checkout[]">
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="valor-diaria">Valor da Diária:</label>
+        <div class="input-group">
+          <div class="input-group-prepend">
+            <span class="input-group-text">R$</span>
+          </div>
+          <input type="number" class="form-control" name="valor-diaria[]" placeholder="Digite o valor da diária">
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="quantidade-diarias">Quantidade de Diárias:</label>
+        <input type="number" class="form-control" name="quantidade-diarias[]" placeholder="Digite a quantidade de diárias">
+      </div>
+      <div class="form-group">
+        <label for="estacionamento">Estacionamento:</label>
+        <div class="input-group">
+          <div class="input-group-prepend">
+            <span class="input-group-text">R$</span>
+          </div>
+          <input type="text" class="form-control" name="estacionamento[]" placeholder="Informe se utilizou estacionamento">
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="consumo">Consumo:</label>
+        <div class="input-group">
+          <div class="input-group-prepend">
+            <span class="input-group-text">R$</span>
+          </div>
+          <input type="text" class="form-control" name="consumo[]" placeholder="Informe o consumo adicional">
+        </div>
+      </div>
+      <hr> <!-- Linha de separação -->
+    </div>
+    <button type="button" class="btn btn-secondary float-right mt-3" id="adiciona-hospedagem">Adicionar Estada</button>
+  </form>
+  
+  <h3 class="mt-5 mb-3">Valor Total da Nota Fiscal</h3>
+  <form>
+    <div class="form-group">
+      <label for="valor-total">Valor Total da Nota Fiscal:</label>
+      <div class="input-group">
+        <div class="input-group-prepend">
+          <span class="input-group-text">R$</span>
+        </div>
+        <input type="number" class="form-control" id="valor-total" placeholder="Digite o valor total da nota fiscal">
+      </div>
+    </div>
+    <button type="button" class="btn btn-primary mt-3 mb-5 float-right" id="gerar-pdf">Gerar PDF</button>
+</form>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.3/jspdf.umd.min.js"></script>
+
+
+<script>
+    $(document).ready(function(){
+      $("#adiciona-hospedagem").click(function(){
+        $(".hospedagem:first").clone().insertBefore("#adiciona-hospedagem").find("input").val("");
+      });
+    });
+  </script>
+  
+  
