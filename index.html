@@ -8,7 +8,7 @@
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <header class="header-background text-center">
+    <header class="header-background text-center border-bottom">
         <div class="container">
           <div class="row justify-content-center align-items-center">
               <img src="logo.png" alt="Logo da Rede Andrade" class="img-fluid">
@@ -16,7 +16,7 @@
         </div>
       </header>
 <div class="container">
-  <h1 class="mt-5 mb-5">Solicitação de Nota Fiscal</h1>
+  <h1 class="mt-5 mb-5 text-center">Solicitação de Nota Fiscal</h1>
   
   <h3 class="mt-5 mb-3">Dados do Hotel</h3>
   <form>
@@ -67,7 +67,7 @@
       </div>
       <div class="form-group">
         <label for="cpf-hospede">CPF do Hóspede:</label>
-        <input type="text" class="form-control" name="cpf-hospede[]" placeholder="Digite o CPF do hóspede">
+        <input type="text" class="form-control" name="cpf-hospede[]" placeholder="Digite o CPF do hóspede (opcional)">
       </div>
       <div class="form-row">
         <div class="form-group col-md-6">
@@ -98,7 +98,7 @@
           <div class="input-group-prepend">
             <span class="input-group-text">R$</span>
           </div>
-          <input type="text" class="form-control" name="estacionamento[]" placeholder="Informe se utilizou estacionamento">
+          <input type="number" class="form-control" name="estacionamento[]" placeholder="Valor do Estacionamento">
         </div>
       </div>
       <div class="form-group">
@@ -107,12 +107,12 @@
           <div class="input-group-prepend">
             <span class="input-group-text">R$</span>
           </div>
-          <input type="text" class="form-control" name="consumo[]" placeholder="Informe o consumo adicional">
+          <input type="number" class="form-control" name="consumo[]" placeholder="Valor do Consumo">
         </div>
       </div>
       <hr> <!-- Linha de separação -->
     </div>
-    <button type="button" class="btn btn-secondary float-right mt-3" id="adiciona-hospedagem">Adicionar Estada</button>
+    <button type="button" class="btn btn-secondary float-right mt-3 mb-3" id="adiciona-hospedagem">Adicionar Estada</button>
   </form>
   
   <h3 class="mt-5 mb-3">Valor Total da Nota Fiscal</h3>
