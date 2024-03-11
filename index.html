@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Formulário de Nota Fiscal</title>
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <link rel="stylesheet" href="validacpfcnpj.js">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -22,7 +23,39 @@
   <form>
     <div class="form-group">
       <label for="hotel">Hotel:</label>
-      <input type="text" class="form-control" id="hotel" placeholder="Digite o hotel">
+      <input class="form-control" list="hoteis" id="hotel" placeholder="Digite o nome do hótel">
+        <datalist id="hoteis">
+          <option value="Vivaldi - Fóz do Iguaçu">
+          <option value="Amazônia - Manaus">
+          <option value="Cecomtur - Florianópolis">
+          <option value="Floph - Florianópolis">
+          <option value="São Francisco - Curitiba">
+          <option value="Novo CWB - Curitiba">
+          <option value="Guaíra - Curitiba">
+          <option value="San Martin - Curitiba">
+          <option value="Braz - Curitiba">
+          <option value="Mercado - Curitiba">
+          <option value="Novo Vernon - Curitiba">
+          <option value="Lapa - Rio de Janeiro">
+          <option value="Goiânia - Goiânia">
+          <option value="Pampulha - Belo Horizonte">
+          <option value="Rivieira - Salvador">
+          <option value="Ondina - Salvador">
+          <option value="Mar Hotel - Salvador">
+          <option value="Barra - Salvador">
+          <option value="Plaza Salvador - Salvador">
+          <option value="Express - Salvador">
+          <option value="Comfort - Natal">
+          <option value="Bello Mare - Natal">
+          <option value="Vela Branca - Recife">
+          <option value="Onda Mar - Recife">
+          <option value="Plaza Recife - Recife">
+          <option value="LG INN - Recife">
+          <option value="Docas - Belém">
+          <option value="Hangar - Belém">
+          <option value="Sol Mar - João Pessoa">
+          <option value="Luxor - Terezina">
+        </datalist>
     </div>
   </form>
   
@@ -30,7 +63,7 @@
   <form>
     <div class="form-group">
       <label for="cpf">CPF/CNPJ:</label>
-      <input type="text" class="form-control" id="cpf" placeholder="Digite o CPF ou CNPJ">
+      <input type="text" class="form-control" name="cpfcnpj" id="cpfcnpj" placeholder="Digite o CPF ou CNPJ">
     </div>
     <div class="form-group">
       <label for="nome">Razão social:</label>
@@ -59,7 +92,7 @@
     <div class="hospedagem">
       <div class="form-group">
         <label for="estada">Estada:</label>
-        <input type="text" class="form-control" name="estada[]" placeholder="Digite a Estada">
+        <input type="text" class="form-control" name="estada[]" placeholder="Digite o número da Estada">
       </div>
       <div class="form-group">
         <label for="nome-hospede">Nome do Hóspede:</label>
@@ -67,7 +100,7 @@
       </div>
       <div class="form-group">
         <label for="cpf-hospede">CPF do Hóspede:</label>
-        <input type="text" class="form-control" name="cpf-hospede[]" placeholder="Digite o CPF do hóspede (opcional)">
+        <input type="text" class="form-control" id="cpfcnpj" name="cpf-hospede[]" placeholder="Digite o CPF do hóspede">
       </div>
       <div class="form-row">
         <div class="form-group col-md-6">
@@ -115,7 +148,7 @@
     <button type="button" class="btn btn-secondary float-right mt-3 mb-3" id="adiciona-hospedagem">Adicionar Estada</button>
   </form>
   
-  <h3 class="mt-5 mb-3">Valor Total da Nota Fiscal</h3>
+  <h3 class="mt-5 mb-3">Dados da Nota Fiscal</h3>
   <form>
     <div class="form-group">
       <label for="valor-total">Valor Total da Nota Fiscal:</label>
@@ -126,6 +159,10 @@
         <input type="number" class="form-control" id="valor-total" placeholder="Digite o valor total da nota fiscal">
       </div>
     </div>
+    <div class="form-group">
+      <label for="observacao">Observação:</label>
+      <input type="text" class="form-control" id="observacao" placeholder="Digite alguma observação (Opcional)">
+    </div>
     <button type="button" class="btn btn-primary mt-3 mb-5 float-right" id="gerar-pdf">Gerar PDF</button>
 </form>
 </div>
@@ -135,13 +172,14 @@
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.3/jspdf.umd.min.js"></script>
 
-
 <script>
-    $(document).ready(function(){
-      $("#adiciona-hospedagem").click(function(){
-        $(".hospedagem:first").clone().insertBefore("#adiciona-hospedagem").find("input").val("");
-      });
+  $(document).ready(function(){
+    $("#adiciona-hospedagem").click(function(){
+      $(".hospedagem:first").clone().insertBefore("#adiciona-hospedagem").find("input").val("");
     });
-  </script>
+  });
+</script>
+
+
   
   
