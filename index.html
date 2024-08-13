@@ -1,185 +1,725 @@
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Formulário de Nota Fiscal</title>
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-  <link rel="stylesheet" href="validacpfcnpj.js">
-  <link rel="stylesheet" href="styles.css">
-</head>
-<body>
-    <header class="header-background text-center border-bottom">
-        <div class="container">
-          <div class="row justify-content-center align-items-center">
-              <img src="logo.png" alt="Logo da Rede Andrade" class="img-fluid">
-          </div>
-        </div>
-      </header>
-<div class="container">
-  <h1 class="mt-5 mb-5 text-center">Solicitação de Nota Fiscal</h1>
-  
-  <h3 class="mt-5 mb-3">Dados do Hotel</h3>
-  <form>
-    <div class="form-group">
-      <label for="hotel">Hotel:</label>
-      <input class="form-control" list="hoteis" id="hotel" placeholder="Digite o nome do hótel">
-        <datalist id="hoteis">
-          <option value="Vivaldi - Fóz do Iguaçu">
-          <option value="Amazônia - Manaus">
-          <option value="Cecomtur - Florianópolis">
-          <option value="Floph - Florianópolis">
-          <option value="São Francisco - Curitiba">
-          <option value="Novo CWB - Curitiba">
-          <option value="Guaíra - Curitiba">
-          <option value="San Martin - Curitiba">
-          <option value="Braz - Curitiba">
-          <option value="Mercado - Curitiba">
-          <option value="Novo Vernon - Curitiba">
-          <option value="Lapa - Rio de Janeiro">
-          <option value="Goiânia - Goiânia">
-          <option value="Pampulha - Belo Horizonte">
-          <option value="Rivieira - Salvador">
-          <option value="Ondina - Salvador">
-          <option value="Mar Hotel - Salvador">
-          <option value="Barra - Salvador">
-          <option value="Plaza Salvador - Salvador">
-          <option value="Express - Salvador">
-          <option value="Comfort - Natal">
-          <option value="Bello Mare - Natal">
-          <option value="Vela Branca - Recife">
-          <option value="Onda Mar - Recife">
-          <option value="Plaza Recife - Recife">
-          <option value="LG INN - Recife">
-          <option value="Docas - Belém">
-          <option value="Hangar - Belém">
-          <option value="Sol Mar - João Pessoa">
-          <option value="Luxor - Terezina">
-        </datalist>
-    </div>
-  </form>
-  
-  <h3 class="mt-5 mb-5">Dados do tomador de serviços</h3>
-  <form>
-    <div class="form-group">
-      <label for="cpf">CPF/CNPJ:</label>
-      <input type="text" class="form-control" name="cpfcnpj" id="cpfcnpj" placeholder="Digite o CPF ou CNPJ">
-    </div>
-    <div class="form-group">
-      <label for="nome">Razão social:</label>
-      <input type="text" class="form-control" id="razao" placeholder="Digite a razão social">
-    </div>
-    <div class="form-group">
-        <label for="endereco">CEP:</label>
-        <input type="text" class="form-control" id="cep" placeholder="Digite o CEP">
-      </div>
-    <div class="form-group">
-      <label for="endereco">Endereço:</label>
-      <input type="text" class="form-control" id="endereco" placeholder="Digite o endereço">
-    </div>
-    <div class="form-group">
-      <label for="cidade">Cidade:</label>
-      <input type="text" class="form-control" id="cidade" placeholder="Digite o cidade">
-    </div>
-    <div class="form-group">
-      <label for="estado">Estado:</label>
-      <input type="text" class="form-control" id="estado" placeholder="Digite o estado">
-    </div>
-  </form>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="index.js"></script>
+  <link rel="stylesheet" href="style.css">
 
-  <h3 class="mt-5 mb-3">Dados da Hospedagem</h3>
-  <form id="hospedagem-form">
-    <div class="hospedagem">
-      <div class="form-group">
-        <label for="estada">Estada:</label>
-        <input type="text" class="form-control" name="estada[]" placeholder="Digite o número da Estada">
-      </div>
-      <div class="form-group">
-        <label for="nome-hospede">Nome do Hóspede:</label>
-        <input type="text" class="form-control" name="nome-hospede[]" placeholder="Digite o nome do hóspede">
-      </div>
-      <div class="form-group">
-        <label for="cpf-hospede">CPF do Hóspede:</label>
-        <input type="text" class="form-control" id="cpfcnpj" name="cpf-hospede[]" placeholder="Digite o CPF do hóspede">
-      </div>
-      <div class="form-row">
-        <div class="form-group col-md-6">
-          <label for="data-checkin">Data de Check-in:</label>
-          <input type="date" class="form-control" name="data-checkin[]">
-        </div>
-        <div class="form-group col-md-6">
-          <label for="data-checkout">Data de Check-out:</label>
-          <input type="date" class="form-control" name="data-checkout[]">
-        </div>
-      </div>
-      <div class="form-group">
-        <label for="valor-diaria">Valor da Diária:</label>
-        <div class="input-group">
-          <div class="input-group-prepend">
-            <span class="input-group-text">R$</span>
-          </div>
-          <input type="number" class="form-control" name="valor-diaria[]" placeholder="Digite o valor da diária">
-        </div>
-      </div>
-      <div class="form-group">
-        <label for="quantidade-diarias">Quantidade de Diárias:</label>
-        <input type="number" class="form-control" name="quantidade-diarias[]" placeholder="Digite a quantidade de diárias">
-      </div>
-      <div class="form-group">
-        <label for="estacionamento">Estacionamento:</label>
-        <div class="input-group">
-          <div class="input-group-prepend">
-            <span class="input-group-text">R$</span>
-          </div>
-          <input type="number" class="form-control" name="estacionamento[]" placeholder="Valor do Estacionamento">
-        </div>
-      </div>
-      <div class="form-group">
-        <label for="consumo">Consumo:</label>
-        <div class="input-group">
-          <div class="input-group-prepend">
-            <span class="input-group-text">R$</span>
-          </div>
-          <input type="number" class="form-control" name="consumo[]" placeholder="Valor do Consumo">
-        </div>
-      </div>
-      <hr> <!-- Linha de separação -->
-    </div>
-    <button type="button" class="btn btn-secondary float-right mt-3 mb-3" id="adiciona-hospedagem">Adicionar Estada</button>
-  </form>
-  
-  <h3 class="mt-5 mb-3">Dados da Nota Fiscal</h3>
-  <form>
-    <div class="form-group">
-      <label for="valor-total">Valor Total da Nota Fiscal:</label>
-      <div class="input-group">
-        <div class="input-group-prepend">
-          <span class="input-group-text">R$</span>
-        </div>
-        <input type="number" class="form-control" id="valor-total" placeholder="Digite o valor total da nota fiscal">
-      </div>
-    </div>
-    <div class="form-group">
-      <label for="observacao">Observação:</label>
-      <input type="text" class="form-control" id="observacao" placeholder="Digite alguma observação (Opcional)">
-    </div>
-    <button type="button" class="btn btn-primary mt-3 mb-5 float-right" id="gerar-pdf">Gerar PDF</button>
-</form>
-</div>
+<body onload="document.getElementById('checkbox_preencher')">
+  <div class="container">
+    <table class='table'>
+      <tr>
+        <td></td>
+        <td class="align-middle" width="70%"><h3>Solicitação de Nota Fiscal</h3></td>
+        <td></td>
+        <td><img src="logo.png" alt="Logo da Rede Andrade" class="img-fluid"></td>
+      </tr>
+    </table>
+    <div class="container">
+      <form id="formDadosHotel" onsubmit="imprime()">
+        <h3 class="mt-5 mb-3">Dados do Hotel</h3>
 
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.3/jspdf.umd.min.js"></script>
+        <div class="form-group">
+          <label for="hotel" class="form-label"><b>*</b>Hotel:</label>
+          <select class="form-select" id="hotel" name="hotel" required onchange="seleciona_tomador(), mostrar_endereco()">
+            <option value="" disabled selected>Selecione um hotel</option>
+            <option value="Amazônia - Manaus">Amazônia - Manaus</option>
+            <option value="Barra - Salvador">Barra - Salvador</option>
+            <option value="Bello Mare - Natal">Bello Mare - Natal</option>
+            <option value="Braz - Curitiba">Braz - Curitiba</option>
+            <option value="Canadá - Rio de Janeiro">Canadá - Rio de Janeiro</option>
+            <option value="Cecomtur - Florianópolis">Cecomtur - Florianópolis</option>
+            <option value="Comfort - Natal">Comfort - Natal</option>
+            <option value="CWB - Curitiba">CWB - Curitiba</option>
+            <option value="Docas - Belém">Docas - Belém</option>
+            <option value="Express - Salvador">Express - Salvador</option>
+            <option value="Floph - Florianópolis">Floph - Florianópolis</option>
+            <option value="Goiânia - Goiânia">Goiânia - Goiânia</option>
+            <option value="Guaíra - Curitiba">Guaíra - Curitiba</option>
+            <option value="Hangar - Belém">Hangar - Belém</option>
+            <option value="Lapa - Rio de Janeiro">Lapa - Rio de Janeiro</option>
+            <option value="LG INN - Recife">LG INN - Recife</option>
+            <option value="Luxor - Terezina">Luxor - Terezina</option>
+            <option value="Mar Hotel - Salvador">Mar Hotel - Salvador</option>
+            <option value="Mercado - Curitiba">Mercado - Curitiba</option>
+            <option value="Navegantes - Recife">Navegantes - Recife</option>
+            <option value="Ondina - Salvador">Ondina - Salvador</option>
+            <option value="Onda Mar - Recife">Onda Mar - Recife</option>
+            <option value="Pampulha - Belo Horizonte">Pampulha - Belo Horizonte</option>
+            <option value="Plaza Recife - Recife">Plaza Recife - Recife</option>
+            <option value="Plaza Salvador - Salvador">Plaza Salvador - Salvador</option>
+            <option value="Rivieira - Salvador">Rivieira - Salvador</option>
+            <option value="San Martin - Curitiba">San Martin - Curitiba</option>
+            <option value="São Francisco - Curitiba">São Francisco - Curitiba</option>
+            <option value="Sol Mar - João Pessoa">Sol Mar - João Pessoa</option>
+            <option value="Vela Branca - Recife">Vela Branca - Recife</option>
+            <option value="Vernon - Curitiba">Vernon - Curitiba</option>
+            <option value="Vivaldi - Fóz do Iguaçu">Vivaldi - Fóz do Iguaçu</option>
+          </select>
+        </div>
 
-<script>
-  $(document).ready(function(){
-    $("#adiciona-hospedagem").click(function(){
-      $(".hospedagem:first").clone().insertBefore("#adiciona-hospedagem").find("input").val("");
-    });
-  });
+        <h3 class="mt-5 mb-5">Nota será Emitida para:</h3>
+
+        <select class="form-select" aria-label="Default select example" id="select_tomador"
+          onchange="formataDocumento(document.getElementById('tomadorDocumento')), seleciona_tomador(), mostrar_endereco()">
+          <option value="Pessoa Física">Pessoa Física</option>
+          <option value="Pessoa Jurídica">Pessoa Jurídica</option>
+          <option value="Hospede Extrangeiro">Extrangeiro</option>
+        </select>
+
+        <br>
+
+        <div class="form-group">
+          <label for="tomadorDocumento" class="form-label"><b>*</b>Documento:</label>
+          <input id="tomadorDocumento"  onblur="formataDocumento(this)" oninput="proibeString(event), preencherDadosOnChange(document.getElementById('checkbox_preencher'))" maxlength="18" type="text" class="form-control"
+            placeholder="Digite o documento do tomador" required>
+        </div>
+
+        <div class="form-group">
+          <label for="tomadorRazao" class="form-label"><b>*</b>Razão social/Nome:</label>
+          <input type="text" class="form-control" id="tomadorRazao" placeholder="Digite a razão social/nome"
+            oninput="preencherDadosOnChange(document.getElementById('checkbox_preencher'))" required>
+        </div>
+
+        <div class="form-group form-check form-switch switch" i>
+          <br>
+          <input class="form-check-input" type="checkbox" role="switch" id="checkbox_endereco"
+            onchange="mostrar_endereco()">
+          <label class="form-check-label" for="checkbox_endereco">Nota Fiscal com endereço?</label>
+        </div>
+
+        <br>
+
+        <div id="endereco" style="display: none;">
+          <div class="form-group">
+            <label for="tomadorCep" class="form-label"><b>*</b>CEP:</label>
+            <input onblur="buscarEnderecoPorCep(this)" oninput="proibeString(event)" type="text" maxlength="10" class="form-control" id="tomadorCep" placeholder="Digite o CEP" >
+          </div>
+
+          <div class="form-group">
+            <label for="tomadorLogradouro" class="form-label"><b>*</b>Logradouro:</label>
+            <input type="text" class="form-control" id="tomadorLogradouro" placeholder="Digite o endereço" >
+          </div>
+
+          <div class="row">
+
+            <div class="form-group col">
+              <label for="tomadorNumero" class="form-label">Número:</label>
+              <input type="text" class="form-control" id="tomadorNumero" oninput="proibeString(event)" placeholder="Digite o endereço">
+            </div>
+
+            <div class="form-group col">
+              <label for="tomadorComplemento" class="form-label">Complemento:</label>
+              <input type="text" class="form-control" id="tomadorComplemento" placeholder="Digite o endereço">
+            </div>
+
+          </div>
+
+          <div class="form-group">
+            <label for="tomadorBairro" class="form-label"><b>*</b>Bairro:</label>
+            <input type="text" class="form-control" id="tomadorBairro" placeholder="Digite o endereço" >
+          </div>
+
+          <div class="form-group">
+            <label for="tomadorCidade" class="form-label"><b>*</b>Cidade:</label>
+            <input type="text" class="form-control" id="tomadorCidade" placeholder="Digite a cidade" >
+          </div>
+
+          <div class="form-group">
+            <label for="tomadorEstado" class="form-label"><b>*</b>Estado:</label>
+            <input type="text" class="form-control" id="tomadorEstado" placeholder="Digite o estado" >
+          </div>
+
+          <div class="form-group" id="pais" style="display: none;">
+            <label for="tomadorPais" class="form-label"><b>*</b>Pais:</label>
+            <input type="text" class="form-control" id="tomadorPais" placeholder="Digite o Pais" >
+          </div>
+
+          <br>
+
+        </div>
+
+        <div class="form-group">
+          <label for="tomadorEmail" class="form-label"><b>*</b>Email:</label>
+          <input type="text" email class="obrigatorio form-control" id="tomadorEmail"
+            placeholder="Digite o email para contato" >
+        </div>
+
+        <div class="form-group">
+          <label for="tomadorTelefone" class="form-label">Telefone:</label>
+          <input type="text" onblur="formataTelefone(this)" oninput="proibeString(event)" class="form-control" id="tomadorTelefone"
+            placeholder="Digite o telefone para contato (Whatsapp)">
+        </div>
+
+        <br>
+
+        <hr>
+
+        <h3 class="mt-5 mb-3">Dados da Hospedagem</h3>
+
+        <div class="form-group">
+          <label for="observacao" class="form-label">Observação:</label>
+          <textarea type="text" class="form-control auto-resize" id="observacao"
+            placeholder="Digite alguma observação (Opcional)"></textarea>
+        </div>
+
+        <br>
+
+        <div class="form-group">
+          <label for="hospedeCpf" class="form-label"><b>*</b>Documento do Hóspede:</label>
+          <input type="text" onblur="formataDocumento(this)" oninput="proibeString(event)" class="obrigatorio form-control" maxlength="14" placeholder="Digite o CPF do hóspede"
+            id="hospedeCpf" disabled >
+        </div>
+
+        <div class="form-group">
+          <label for="hospedeNome" class="form-label"><b>*</b>Nome do Hóspede:</label>
+          <input type="text" class="obrigatorio  form-control" name="nome-hospede[]"
+            placeholder="Digite o nome do hóspede" id="hospedeNome" disabled >
+        </div>
+
+        <br>
+
+        <div class="form-check form-switch" id="preencher">
+          <input class="form-check-input" type="checkbox" id="checkbox_preencher"
+            onchange="preencherDadosOnChange(this)" checked>
+          <label class="form-check-label" for="checkbox_preencher">Usar o documento do tomador de serviços</label>
+        </div>
+
+        <!-- Modal para nome do hotel inválido -->
+        <div class="modal fade" id="modalNomeHotelInvalido" tabindex="-1" aria-labelledby="modalNomeHotelInvalidoLabel" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-danger">
+              <div class="modal-header bg-danger text-white">
+                <h5 class="modal-title" id="modalNomeHotelInvalidoLabel">Erro</h5>
+                <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                Insira o nome do hotel da hospedagem.
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Modal para documento do tomador inválido -->
+        <div class="modal fade" id="modalDocumentoTomadorInvalido" tabindex="-1" aria-labelledby="modalDocumentoTomadorInvalidoLabel" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-danger">
+              <div class="modal-header bg-danger text-white">
+                <h5 class="modal-title" id="modalDocumentoTomadorInvalidoLabel">Erro</h5>
+                <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                Insira o Documento do Tomador de Serviços.
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Modal para CPF/CNPJ inválido -->
+        <div class="modal fade" id="modalCpfCnpjInvalido" tabindex="-1" aria-labelledby="modalCpfCnpjInvalidoLabel" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-danger">
+              <div class="modal-header bg-danger text-white">
+                <h5 class="modal-title" id="modalCpfCnpjInvalidoLabel">Erro</h5>
+                <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                Informe um CPF ou CNPJ válido.
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Modal para razão social do tomador inválida -->
+        <div class="modal fade" id="modalRazaoSocialInvalida" tabindex="-1" aria-labelledby="modalRazaoSocialInvalidaLabel" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-danger">
+              <div class="modal-header bg-danger text-white">
+                <h5 class="modal-title" id="modalRazaoSocialInvalidaLabel">Erro</h5>
+                <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                Insira o Nome ou Razão Social do Tomador de Serviços.
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Modal para endereço do tomador inválido -->
+        <div class="modal fade" id="modalEnderecoInvalido" tabindex="-1" aria-labelledby="modalEnderecoInvalidoLabel" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-danger">
+              <div class="modal-header bg-danger text-white">
+                <h5 class="modal-title" id="modalEnderecoInvalidoLabel">Erro</h5>
+                <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                Insira um endereço válido para o Tomador de Serviços.
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Modal de E-mail Inválido -->
+        <div class="modal fade" id="modalEmailInvalido" tabindex="-1" aria-labelledby="modalEmailInvalidoLabel" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+              <div class="modal-header bg-danger text-white">
+                <h5 class="modal-title" id="modalEmailInvalidoLabel">OPS... Não</h5>
+                <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                O e-mail informado é inválido. Verifique se o formato está correto.
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Modal para CPF do hóspede inválido -->
+        <div class="modal fade" id="modalCpfHospedeInvalido" tabindex="-1" aria-labelledby="modalCpfHospedeInvalidoLabel" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-danger">
+              <div class="modal-header bg-danger text-white">
+                <h5 class="modal-title" id="modalCpfHospedeInvalidoLabel">Erro</h5>
+                <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                Informe um CPF válido para o hóspede.
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Modal para nome do hóspede inválido -->
+        <div class="modal fade" id="modalNomeHospedeInvalido" tabindex="-1" aria-labelledby="modalNomeHospedeInvalidoLabel" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-danger">
+              <div class="modal-header bg-danger text-white">
+                <h5 class="modal-title" id="modalNomeHospedeInvalidoLabel">Erro</h5>
+                <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                Insira o Nome ou Razão Social do hóspede.
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Modal para número de estadas inválido -->
+        <div class="modal fade" id="modalNumeroEstadasInvalido" tabindex="-1" aria-labelledby="modalNumeroEstadasInvalidoLabel" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-danger">
+              <div class="modal-header bg-danger text-white">
+                <h5 class="modal-title" id="modalNumeroEstadasInvalidoLabel">Erro</h5>
+                <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                Nenhuma estada armazenada.
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Modal de Valor Total Inválido -->
+        <div class="modal fade" id="modalValorTotalInvalido" tabindex="-1" aria-labelledby="modalValorTotalInvalidoLabel" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+              <div class="modal-header bg-danger text-white">
+                <h5 class="modal-title" id="modalValorTotalInvalidoLabel">OPS... Não</h5>
+                <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                O valor total da nota fiscal deve ser maior que 0. Verifique o valor informado.
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+
+        <br>
+
+        <!-- Link para abrir o modal -->
+        <div class="d-grid">
+          <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalEstada">Adicionar Estada</button>
+        </div>
+
+        <div class="modal fade" id="modalEstada" tabindex="-1" role="dialog" aria-labelledby="modalEstadaLabel" aria-hidden="true">
+          <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+            
+            <div class="modal-content">
+
+              <div class="modal-header">
+                <h5 class="modal-title" id="modalEstadaLabel">Adicionar Estada</h5>
+                <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+              </div>
+
+              <div class="modal-body">
+                <!-- Aqui vai o seu formulário -->
+
+                <div class="form-group">
+                  <label for="estada" class="form-label"><b>*</b>Nr Estada:</label>
+                  <input type="text" class="form-control" placeholder="Digite o número da Estada" id="estada" oninput="proibeString(event)">
+                </div>
+
+                <div class="row">
+                  <div class="form-group col-md-6">
+                    <label for="checkIn" class="form-label"><b>*</b>Data de Check-in:</label>
+                    <input type="date" class="form-control" id="checkIn" onblur="calcularDiarias()">
+                  </div>
+                  <div class="form-group col-md-6">
+                    <label for="checkOut" class="form-label"><b>*</b>Data de Check-out:</label>
+                    <input type="date" class="form-control" id="checkOut" onblur="calcularDiarias()">
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label for="valorDiaria" class="form-label">Valor da Diária:</label>
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text">R$</span>
+                    </div>
+                    <input type="number" class="form-control formatted-number" id="valorDiaria" placeholder="Digite o valor unitário da(as) diária(as)">
+                    <button type="button" class="btn btn-secondary" title="Adicionar Quarto" onclick="adicionaDiaria()">+</button>
+                  </div>
+                  <div id="diariasExtras"></div>
+                </div>
+
+                <br>
+
+                <div class="form-group">
+                  <label for="quantidadeDiarias" class="form-label">Quantidade de Diárias:</label>
+                  <input type="number" class="form-control" placeholder="Quantidade de diárias" id="quantidadeDiarias" readonly>
+                </div>
+
+                <div class="form-group">
+                  <label for="estacionamento" class="form-label">Valor total do Estacionamento:</label>
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text">R$</span>
+                    </div>
+                    <input type="number" class="form-control formatted-number" placeholder="Valor total do Estacionamento" id="estacionamento">
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label for="consumo" class="form-label">Valor total do Consumo:</label>
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text">R$</span>
+                    </div>
+                    <input type="number" class="form-control formatted-number" placeholder="Valor total do Consumo" id="consumo">
+                  </div>
+                </div>
+
+                <div class="form-check">
+                  <br>
+                  <input type="checkbox" class="form-check-input" id="checkbox_dividirNota" onchange="mostrarCampoDividirNota()">
+                  <label class="form-check-label" for="checkbox_dividirNota">Dividir valor total da estada</label>
+                </div>
+
+                <div id="dividirNota" style="display: none;">
+                  <label for="numeroHospedes" class="form-label">Número de Hóspedes:</label>
+                  <input type="number" class="form-control" id="numeroHospedes" placeholder="Digite a quantidade de hóspedes para dividir o valor da estada">
+                </div>
+
+              </div>
+
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+                <button type="button" class="btn btn-primary" onclick="armazenarDadosHospedagem()">Salvar Dados da estada</button>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+        <!-- Modal para estada inválida -->
+        <div class="modal fade" id="modalEstadaInvalida" tabindex="-1" aria-labelledby="modalEstadaInvalidaLabel" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-danger">
+              <div class="modal-header bg-danger text-white">
+                <h5 class="modal-title" id="modalEstadaInvalidaLabel">Erro</h5>
+                <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                Por favor, insira uma estada válida.
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Fechar</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Modal para datas inválidas -->
+        <div class="modal fade" id="modalDatasInvalidas" tabindex="-1" aria-labelledby="modalDatasInvalidasLabel" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-danger">
+              <div class="modal-header bg-danger text-white">
+                <h5 class="modal-title" id="modalDatasInvalidasLabel">Erro</h5>
+                <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                Por favor, preencha as datas de check-in e check-out.
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Fechar</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Modal para valores inválidos -->
+        <div class="modal fade" id="modalValoresInvalidos" tabindex="-1" aria-labelledby="modalValoresInvalidosLabel" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-danger">
+              <div class="modal-header bg-danger">
+                <h5 class="modal-title" id="modalValoresInvalidosLabel">Erro</h5>
+                <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                <p>O valor total da estada deve ser maior que 0.</p>
+                <p>Preencha ao menos um valor.</p>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Fechar</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Modal para valores negativos -->
+        <div class="modal fade" id="modalValoresNegativos" tabindex="-1" aria-labelledby="modalValoresNegativosLabel" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-danger">
+              <div class="modal-header bg-danger text-white">
+                <h5 class="modal-title" id="modalValoresNegativosLabel">Erro</h5>
+                <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                Os valores não podem ser negativos.
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Fechar</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Modal para número de hóspedes inválido -->
+        <div class="modal fade" id="modalNumeroHospedesInvalido" tabindex="-1" aria-labelledby="modalNumeroHospedesInvalidoLabel" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-danger">
+              <div class="modal-header bg-danger text-white">
+                <h5 class="modal-title" id="modalNumeroHospedesInvalidoLabel">Erro</h5>
+                <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                Número de hóspedes não pode ser menor que 1.
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Fechar</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Modal de Datas Inválidas -->
+        <div class="modal fade" id="modalDatasInvalidas" tabindex="-1" aria-labelledby="modalDatasInvalidasLabel" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+              <div class="modal-header bg-danger text-white">
+                <h5 class="modal-title" id="modalDatasInvalidasLabel">Erro</h5>
+                <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                Por favor, insira datas válidas.
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Modal de Diferença de Datas Inválida -->
+        <div class="modal fade" id="modalDiferencaNegativa" tabindex="-1" aria-labelledby="modalDiferencaNegativaLabel" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+              <div class="modal-header bg-danger text-white">
+                <h5 class="modal-title" id="modalDiferencaNegativaLabel">Erro</h5>
+                <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                A diferença entre as diárias não pode ser menor que 1 dia.
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Modal de Aviso de Diárias Excessivas -->
+        <div class="modal fade" id="modalDiariasExcessivas" tabindex="-1" aria-labelledby="modalDiariasExcessivasLabel" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+              <div class="modal-header bg-warning text-dark">
+                <h5 class="modal-title" id="modalDiariasExcessivasLabel">Aviso</h5>
+              </div>
+              <div class="modal-body">
+                O valor das diárias ultrapassou 30 dias. deseja continuar.
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="recusarDiarias()">Recusar</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal">Aceitar</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Modal de Estada Salva com Sucesso -->
+        <div class="modal fade" id="modalEstadaSalva" tabindex="-1" aria-labelledby="modalEstadaSalvaLabel" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+              <div class="modal-header bg-success text-light">
+                <h5 class="modal-title" id="modalEstadaSalvaLabel">Sucesso</h5>
+                <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                A estada foi salva com sucesso!
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+                <!-- Adicione um botão adicional aqui, se necessário -->
+                <!-- <button type="button" class="btn btn-primary">Outra Ação</button> -->
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+        <br>
+
+        <table id="listaHospedagem" class="table table-striped table-bordered my-3">
+          <thead>
+            <tr>
+              <th>Estada</th>
+              <th>Data de Check-in</th>
+              <th>Data de Check-out</th>
+              <th>Valor Total</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- As linhas da tabela serão adicionadas dinamicamente aqui -->
+          </tbody>
+        </table>
+
+        <br>
+
+        <div class="form-group">
+          <label for="valorTotal" class="form-label">Valor Total da Nota Fiscal:</label>
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text">R$</span>
+            </div>
+            <input type="text" class="obrigatorio form-control formatted-number"
+              placeholder="Valor total da nota fiscal" id="valorTotal" >
+          </div>
+        </div>
+
+        <br>
+
+        <div class="d-grid">
+          <button type="button" class="btn btn-primary" id="gerar-pdf" onclick="imprime()" disabled>Salvar Solicitação</button>
+        </div>
+
+        <br>
+        <br>
+      </form>
+    </div>
+
+
+
+  </div>
+  <script>
+// Função para formatar número com duas casas decimais
+function formatarNumero(input) {
+  let value = input.value.replace(',', '.'); // Substitui a vírgula por ponto para conversão correta
+  let floatValue = parseFloat(value);
+
+  if (!isNaN(floatValue)) {
+    input.value = floatValue.toFixed(2).replace('.', ','); // Formata com duas casas decimais e substitui ponto por vírgula
+  }
+}
+
+// Evento de blur para formatar número ao sair do campo
+document.addEventListener('blur', function (event) {
+  const target = event.target;
+  if (target.classList.contains('formatted-number')) {
+    formatarNumero(target);
+  }
+}, true); // Captura eventos na fase de propagação
+
+// Evento de input para limitar o número de casas decimais enquanto o usuário digita
+document.addEventListener('input', function (event) {
+  const target = event.target;
+  if (target.classList.contains('formatted-number')) {
+    let value = target.value.replace(',', '.');
+    let parts = value.split('.');
+
+    if (parts.length > 1 && parts[1].length > 2) {
+      target.value = parseFloat(value).toFixed(2).replace('.', ',');
+    }
+  }
+});
+
 </script>
 
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+    crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
 
-  
-  
+</html>

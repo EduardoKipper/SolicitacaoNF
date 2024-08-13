@@ -1,8 +1,61 @@
-.header-background {
-    background-image: url('fundo.jpg'); /* Substitua 'fundo.jpg' pelo caminho da sua imagem */
-    background-size: cover;
-    background-position: center;
-    color: white;
-
+.no-top-border th, .no-top-border td {
+    border-top: none !important;
   }
-  
+
+/* .table {
+  margin-bottom: 0.05rem;
+  border-collapse:separate;
+}
+
+.table td{
+  padding: 0.2rem 0.75rem;
+} */
+
+.auto-resize {
+  width: 100%;
+  min-height: 50px; /* Altura mínima */
+  max-height: 300px; /* Altura máxima */
+  overflow: hidden;
+}
+
+.invalido {
+  border: 1px solid red; /* Vermelho */
+}
+
+.preencher {
+  border-color: #dac23a; /* amarelo */
+}
+
+.teste {
+  display: flex;
+  align-items: center;
+}
+
+@media print {
+  #imprime {
+      display: none;
+  }
+}
+
+#listaHospedagem {
+  width: 100%;
+  border-collapse: collapse; /* Remove espaços entre células */
+}
+
+#listaHospedagem th, #listaHospedagem td {
+  text-align: center;
+  padding: 10px;
+}
+
+#listaHospedagem th {
+  background-color: #f2f2f2;
+}
+
+#listaHospedagem td {
+  border-bottom: 1px solid #ddd;
+}
+
+.btn-sm {
+  margin: 0 5px; /* Espaçamento entre os botões */
+}
+
