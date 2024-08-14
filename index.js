@@ -726,7 +726,7 @@ function imprime() {
         <td></td>
         <td class="align-middle" width="70%"><h3>Solicitação de Nota Fiscal</h3></td>
         <td></td>
-        <td><img src="logo.png" alt="Logo da Rede Andrade" class="img-fluid"></td>
+        <td><img src="logo.png" alt="Logo da empresa" class="img-fluid"></td>
       </tr>
     </table>
     <table class='table'>
