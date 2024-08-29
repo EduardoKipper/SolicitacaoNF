@@ -1,25 +1,29 @@
-let dadosHospedagemArmazenados = [];
-atualizarValorTotalNota();
+var dadosHospedagemArmazenados = [];
 
-function formataCep(input) {
+// Função para formatar o Cep (XXXXX-XXX)
+function formatCep(input) {
 	var cep = new String(input.value);
 	if (cep != "") {
 		cep = cep.replace("-", "");
 		input.value = cep.substr(0, 5) + "-" + cep.substr(5, 3);
 	}
+  return cep
 }
 
-function formataCpf(input) {
+// Função para formatar o CPF (XXX.XXX.XXX-XX)
+function formatCpf(input) {
   var cpf = new String(input.value);
   if (cpf != "") {
-      cpf = cpf.replace(/\D/g, ''); // Remove tudo que não é dígito
+      cpf = cpf.replace(/\D/g, ''); // expected: 00000000000
       if (cpf.length > 11) {
           cpf = cpf.substring(0, 11); // Garante que não tenha mais de 11 dígitos
       }
-      input.value = cpf.substr(0, 3) + "." + cpf.substr(3, 3) + "." + cpf.substr(6, 3) + "-" + cpf.substr(9, 2);
+      input.value = cpf.substr(0, 3) + "." + cpf.substr(3, 3) + "." + cpf.substr(6, 3) + "-" + cpf.substr(9, 2); // expected: 000.000.000-00
   }
 }
-function formataCnpj(input) {
+
+// Função para formatar o CNPJ (XX.XXX.XXX/XXXX-XX)
+function formatCnpj(input) {
   var cnpj = new String(input.value);
   if (cnpj != "") {
       cnpj = cnpj.replace(/\D/g, ''); // Remove tudo que não é dígito
@@ -30,20 +34,22 @@ function formataCnpj(input) {
   }
 }
 
-function formataDocumento(input) {
+// Função para formatar o documento de acordo com o tipo de tomador
+function formatServiceTakerDoc(input) {
   tipoTomador = document.getElementById('select_tomador').value
   if (tipoTomador === "Pessoa Física") {
-    formataCpf(input)
+    formatCpf(input)
   } else if (tipoTomador === "Pessoa Jurídica") {
-    formataCnpj(input)
+    formatCnpj(input)
   }
   documentoHospede = document.getElementById('hospedeCpf').value
   if (tipoTomador != "Hospede Extrangeiro") {
-    formataCpf(document.getElementById('hospedeCpf'))
+    formatCpf(document.getElementById('hospedeCpf'))
   }
 }
 
-function formataTelefone(input) {
+// Função para formatar o telefone + DDD
+function formatPhone(input) {
     var phone = new String(input.value);
     if (phone != "") {
         // Remove tudo que não é dígito
@@ -67,13 +73,22 @@ function formataTelefone(input) {
     }
 }
 
-function formataDataBrasileira(data) {
+// Função para formatar data para o formato brasileiro (DD/MM/AAAA)
+function returnBrasilianDate(data) {
   const [year, month, day] = data.split('-');
   return `
     ${day}/${month}/${year}
     `;
 }
 
+// Função para formatar número como moeda (duas casas decimais)
+function returnCurrencyFormat(id) {
+  let input = document.getElementById(id)
+  let formatedValue = input.value.replace(',', '.'); // Substitui a vírgula por ponto para conversão correta
+  let floatValue = parseFloat(formatedValue);
+  input.value = floatValue.toFixed(2).replace('.', ','); // Formata com duas casas decimais e substitui ponto por vírgula
+}
+// Função que não permite a entrada de uma string no input
 function proibeString(event) {
     var input = event.target;
     var value = input.value;
@@ -81,13 +96,16 @@ function proibeString(event) {
     input.value = value.replace(/[^0-9]/g, '');
 }
 
-function buscarEnderecoPorCep(input) {
-  var cep = input.value.replace(/\D/g, ''); // Remove caracteres não numéricos
+function proibeSpace(event) {
+  var input = event.target;
+  var value = input.value;
+  input.value = value.toString().replace(" ", "");
+}
 
-  if (cep != "") {
-		cep = cep.replace("-", "");
-		input.value = cep.substr(0, 5) + "-" + cep.substr(5, 3);
-	}
+// Função para buscar o endereço pelo CEP usando a API do 'viacep'
+function getCep(input) {
+
+  cep = formatCep(input)
 
   if (cep.length === 8) {
       // Requisição à API dos Correios
@@ -121,18 +139,8 @@ function buscarEnderecoPorCep(input) {
   }
 }
 
-function limparCamposEndereco() {
-  document.getElementById('tomadorLogradouro').value = '';
-  document.getElementById('tomadorBairro').value = '';
-  document.getElementById('tomadorCidade').value = '';
-  document.getElementById('tomadorEstado').value = '';
-  // Se necessário, limpe o campo de país
-  if (document.getElementById('pais')) {
-      document.getElementById('pais').style.display = 'none';
-  }
-}
-
-function validarValor(id, valor) {
+// Função que valida se o valor é Negativo
+function validaValorNegativo(id, valor) {
   const elemento = document.getElementById(id);
   if (valor < 0) {
     elemento.classList.add("border-danger");
@@ -143,6 +151,7 @@ function validarValor(id, valor) {
   }
 }
 
+// Função que valida se o campo está preenchido
 function validarCampo(id, valor) {
   const elemento = document.getElementById(id);
   const valido = !!valor; // Verifica se valor não é nulo, indefinido, ou falso
@@ -156,6 +165,35 @@ function validarCampo(id, valor) {
   return valido;
 }
 
+// Função que valida os dados da Assinatura
+function validarDadosAssinatura() {
+  const nomeAssinatura = document.getElementById('nomeAssinatura').value.trim();
+  const funcaoAssinatura = document.getElementById('funcao').value;
+
+  // Verifica se o nome foi preenchido
+  if (!nomeAssinatura) {
+    alert('Por favor, preencha seu nome.');
+    return null; // Retorna null se o nome não for válido
+  }
+
+  if (!funcaoAssinatura) {
+    alert('Por favor, selecione sua função.');
+    return null; // Retorna null se a função não for selecionada
+  }
+
+  esconderModal('modalAssinatura')
+
+  return { nomeAssinatura, funcaoAssinatura };
+}
+
+// Função que retorna os dados da Assinatura
+function recebeDadosAssinatura() {
+  const nomeAssinatura = document.getElementById('nomeAssinatura').value.trim();
+  const funcaoAssinatura = document.getElementById('funcao').value;
+  return { nomeAssinatura, funcaoAssinatura };
+}
+
+// Função para validar os dados da solicitação
 function validarDadosSolicitacao(dados) {
   const { numeroEstadas, mostrarEndereco, hotel, tipoTomador, tomadorDocumento, tomadorRazao, tomadorEmail, tomadorCep, tomadorLogradouro, tomadorBairro, tomadorCidade, tomadorEstado, tomadorPais, hospedeNome, hospedeCpf, valorTotalNota } = dados;
 
@@ -274,16 +312,109 @@ function validarDadosSolicitacao(dados) {
   return true;
 }
 
+// Função que valida o Email preenchido
 function validarEmail(email) {
   const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   return regex.test(email);
 }
 
+// Função que valida o CEP preenchido
+function validaCEP(cep) {
+  // Remove todos os caracteres que não são dígitos
+  cep = cep.replace(/\D/g, '');
+  
+  // Verifica se o CEP tem exatamente 8 dígitos
+  if (cep.length === 8) {
+      return true;
+  }
+  return false;
+}
+
+// Função que valida o CNPJ preenchido
+function validaCNPJ(cnpj) {
+  // Retira todos os caracteres especiais
+  cnpj = cnpj.replace(/[^\d]+/g, '');
+
+  // Verifica o tamanho do cnpj para conter 14 digitos exatos
+  if (cnpj.length !== 14) return false;
+
+  let soma = 0;
+  let resto;
+  const pesos1 = [5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2];
+  const pesos2 = [6, 5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2];
+
+  // Validação do primeiro dígito verificador
+  for (let i = 0; i < 12; i++) {
+      soma += cnpj[i] * pesos1[i];
+  }
+  resto = soma % 11;
+  if (resto < 2) {
+      if (cnpj[12] !== '0') return false;
+  } else {
+      if (cnpj[12] !== (11 - resto).toString()) return false;
+  }
+
+  // Validação do segundo dígito verificador
+  soma = 0;
+  for (let i = 0; i < 13; i++) {
+      soma += cnpj[i] * pesos2[i];
+  }
+  resto = soma % 11;
+  if (resto < 2) {
+      if (cnpj[13] !== '0') return false;
+  } else {
+      if (cnpj[13] !== (11 - resto).toString()) return false;
+  }
+
+  return true;
+}
+
+// Função que valida o CPF preenchido
+function validarCPF(cpf) {
+  // Remove caracteres não numéricos
+  cpf = cpf.replace(/[^\d]+/g, '');
+
+  // Verifica se o CPF tem 11 dígitos
+  if (cpf.length !== 11) {
+      return false;
+  }
+
+  // Verifica se todos os dígitos são iguais (caso típico de CPF inválido)
+  if (/^(\d)\1{10}$/.test(cpf)) {
+      return false;
+  }
+
+  // Função para calcular um dos dígitos verificadores
+  function calcularDigito(cpf, pesoInicial) {
+      let soma = 0;
+      for (let i = 0; i < cpf.length; i++) {
+          soma += parseInt(cpf.charAt(i)) * (pesoInicial - i);
+      }
+      let resto = soma % 11;
+      return (resto < 2) ? 0 : 11 - resto;
+  }
+
+  // Calcula o primeiro dígito verificador
+  let digito1 = calcularDigito(cpf.substring(0, 9), 10);
+  // Calcula o segundo dígito verificador
+  let digito2 = calcularDigito(cpf.substring(0, 9) + digito1, 11);
+
+  // Verifica se os dígitos calculados são iguais aos fornecidos
+  return digito1 === parseInt(cpf.charAt(9)) && digito2 === parseInt(cpf.charAt(10));
+}
+
+// Função para mostrar um modal pelo id
 function mostrarModal(modalId) {
-  const modalElement = document.getElementById(modalId);
-  const modal = new bootstrap.Modal(modalElement);
+  var modal = bootstrap.Modal.getInstance(document.getElementById(modalId));
   modal.show();
 }
+
+// Função para esconder um modal pelo id
+function esconderModal(modalId) {
+  var modal = bootstrap.Modal.getInstance(document.getElementById(modalId));
+  modal.hide()
+}
+
 
 function validarDadosHospedagem(estada, checkIn, checkOut, numeroHospedes, valorDiaria, valorConsumo, valorEstacionamento, valorTotalEstada) {
   // Valida os campos de check-in e check-out
@@ -291,9 +422,9 @@ function validarDadosHospedagem(estada, checkIn, checkOut, numeroHospedes, valor
   const checkInValido = validarCampo("checkIn", checkIn);
   
   // Valida os campos de valores
-  const valorDiariaValido =  validarValor("valorDiaria", valorDiaria);
-  const valorConsumoValido = validarValor("consumo", valorConsumo);
-  const valorEstacionamentoValido = validarValor("estacionamento", valorEstacionamento);
+  const valorDiariaValido =  validaValorNegativo("valorDiaria", valorDiaria);
+  const valorConsumoValido = validaValorNegativo("consumo", valorConsumo);
+  const valorEstacionamentoValido = validaValorNegativo("estacionamento", valorEstacionamento);
 
   // Valida o campo estada
   if (!estada || estada.length > 6) {
@@ -341,7 +472,6 @@ function validarDadosHospedagem(estada, checkIn, checkOut, numeroHospedes, valor
   return true;
 }
 
-
 function gerarIdUnico() {
   return Math.random().toString(36).substring(2, 15);
 }
@@ -350,9 +480,9 @@ function armazenarDadosHospedagem() {
   try {
     let estada = document.getElementById('estada').value.trim();
     let checkIn = document.getElementById('checkIn').value;
-    let checkInFormatado = formataDataBrasileira(checkIn);
+    let checkInFormatado = returnBrasilianDate(checkIn);
     let checkOut = document.getElementById('checkOut').value;
-    let checkOutFormatado = formataDataBrasileira(checkOut);
+    let checkOutFormatado = returnBrasilianDate(checkOut);
     let valorDiaria = parseFloat(document.getElementById('valorDiaria').value) || 0;
     let quantidadeDiarias = parseFloat(document.getElementById('quantidadeDiarias').value) || 0;
     let valorEstacionamento = parseFloat(document.getElementById('estacionamento').value) || 0;
@@ -405,15 +535,15 @@ function armazenarDadosHospedagem() {
     renderizarListaHospedagem();
     document.getElementById("gerar-pdf").disabled = false
 
+    var myModal = bootstrap.Modal.getInstance(document.getElementById('modalEstada'));
+    myModal.hide()
     mostrarModal('modalEstadaSalva');
     // Limpar os campos de entrada após armazenar os dados
-    limparCamposEntrada();
+    limparCamposEstada();
   } catch (error) {
     alert('Ocorreu um erro ao armazenar os dados da hospedagem: ' + error.message);
   }
 }
-
-
 
 function adicionaDiaria() {
   const container = document.getElementById('diariasExtras');
@@ -433,6 +563,7 @@ function adicionaDiaria() {
   input.type = 'number';
   input.className = 'form-control formatted-number';
   input.placeholder = 'Digite o valor unitário da diária';
+  input.id = 'diaria_extra';
 
   const button = document.createElement('button');
   button.type = 'button';
@@ -509,7 +640,6 @@ function recusarDiarias() {
   document.getElementById('quantidadeDiarias').value = '';
 }
 
-
 // Função para mostrar modais
 function mostrarModal(modalId, mensagem) {
   const modalElement = document.getElementById(modalId);
@@ -525,7 +655,37 @@ function atualizarValorTotalNota() {
   document.getElementById('valorTotal').value = valorTotalNota.toFixed(2).replace('.', ',');
 }
 
-function limparCamposEntrada() {
+function limparAssinatura() {
+  document.getElementById('nomeAssinatura').value = '';
+  document.getElementById('funcao').value = '';
+  return
+}
+
+function limparCampos() {
+  dadosHospedagemArmazenados = []
+  renderizarListaHospedagem();
+  limparCamposEndereco()
+  limparCamposEstada()
+  document.getElementById('hotel').value = '';
+  document.getElementById('tomadorDocumento').value = '';
+  document.getElementById('tomadorRazao').value = '';
+  document.getElementById('tomadorCep').value = '';
+  document.getElementById('tomadorLogradouro').value = '';
+  document.getElementById('tomadorNumero').value = '';
+  document.getElementById('tomadorComplemento').value = '';
+  document.getElementById('tomadorBairro').value = '';
+  document.getElementById('tomadorCidade').value = '';
+  document.getElementById('tomadorEstado').value = '';
+  document.getElementById('tomadorPais').value = '';
+  document.getElementById('tomadorEmail').value = '';
+  document.getElementById('tomadorTelefone').value = '';
+  document.getElementById('observacao').value = '';
+  document.getElementById('hospedeNome').value = '';
+  document.getElementById('hospedeCpf').value = '';
+  document.getElementById("valorTotal").value = '';
+}
+
+function limparCamposEstada() {
   document.getElementById('estada').value = '';
   document.getElementById('checkIn').value = '';
   document.getElementById('checkOut').value = '';
@@ -536,6 +696,18 @@ function limparCamposEntrada() {
   document.getElementById('checkbox_dividirNota').checked = false;
   document.getElementById('numeroHospedes').value = 1;
   document.getElementById('diariasExtras').innerHTML = '';
+}
+
+// Função para limpar os campos de endereço
+function limparCamposEndereco() {
+  document.getElementById('tomadorLogradouro').value = '';
+  document.getElementById('tomadorBairro').value = '';
+  document.getElementById('tomadorCidade').value = '';
+  document.getElementById('tomadorEstado').value = '';
+  // Se necessário, limpe o campo de país
+  if (document.getElementById('pais')) {
+      document.getElementById('pais').style.display = 'none';
+  }
 }
 
 function renderizarListaHospedagem() {
@@ -641,8 +813,6 @@ function excluirHospedagem(id) {
   renderizarListaHospedagem();
 }
 
-
-
 function obterMenorData(datas) {
   return datas.reduce((menor, atual) => new Date(atual) < new Date(menor) ? atual : menor);
 }
@@ -650,7 +820,6 @@ function obterMenorData(datas) {
 function obterMaiorData(datas) {
   return datas.reduce((maior, atual) => new Date(atual) > new Date(maior) ? atual : maior);
 }
-
 
 function imprime() {
   // Coleta dos dados do formulário
@@ -674,6 +843,16 @@ function imprime() {
   const hospedeCpf = document.getElementById('hospedeCpf').value;
   const valorTotalNota = document.getElementById("valorTotal").value;
   
+  const dadosAssinatura = recebeDadosAssinatura();
+
+  if (dadosAssinatura) {
+      const { nomeAssinatura, funcaoAssinatura } = dadosAssinatura;
+
+      // Agora você pode usar as variáveis nomeAssinatura e funcaoAssinatura
+      console.log("Nome:", nomeAssinatura);
+      console.log("Função:", funcaoAssinatura);
+    }
+    console.log(dadosAssinatura)
 
   // Dados da hospedagem
   const estadas = dadosHospedagemArmazenados.map(dados => dados.estada).join(' | ');
@@ -726,7 +905,7 @@ function imprime() {
         <td></td>
         <td class="align-middle" width="70%"><h3>Solicitação de Nota Fiscal</h3></td>
         <td></td>
-        <td><img src="logo.png" alt="Logo da empresa" class="img-fluid"></td>
+        <td><img src="logo.png" alt="Logo da Empresa" class="img-fluid"></td>
       </tr>
     </table>
     <table class='table'>
@@ -835,13 +1014,17 @@ function imprime() {
       </tr>
     </table>
     <br>
-    <div class="d-grid">
-      <button type='button' id="imprime" class='btn btn-primary' onclick='window.print();'>Imprimir</button>
+    <div class="d-flex justify-content-between">
+      <div>
+        <p>Assinado por: <strong>${dadosAssinatura.nomeAssinatura}</strong> - ${dadosAssinatura.funcaoAssinatura}</p>
+      </div>
+      <div>
+        <button type='button' id="imprime" class='btn btn-primary' onclick='window.print();'>Imprimir</button>
+      </div>
     </div>
   </div>`);
   w.document.close();
 }
-
 
 function mostrar_endereco() {
   var checkboxEndereco = document.getElementById("checkbox_endereco");
@@ -871,14 +1054,20 @@ function seleciona_tomador() {
     preencherDadosOnChange(checkboxUsarDados);
   } else {
     switchEndereco.checked = false;
-    switchEndereco.disabled = false; // Habilita o checkbox
+    switchEndereco.disabled = false;
     checkboxUsarDados.checked = true;
     checkboxUsarDados.disabled = false;
     preencherDadosOnChange(checkboxUsarDados);
   }
 
   // Verifica se o hotel selecionado está em Florianópolis e o tomador é Pessoa Física
-  if (hotel.includes("Florianópolis") || hotel.includes("Belém") || hotel.includes("Terezina") || hotel.includes("Rio de Janeiro") || hotel.includes("Belo Horizonte") || hotel.includes("João Pessoa") || hotel.includes("Fóz do Iguaçu")) {
+  if (hotel.includes("Florianópolis") 
+    || hotel.includes("Belém") 
+    || hotel.includes("Teresina") 
+    || hotel.includes("Rio de Janeiro") 
+    || hotel.includes("Belo Horizonte") 
+    || hotel.includes("João Pessoa") 
+    || hotel.includes("Fóz do Iguaçu")) {
     switchEndereco.checked = true;
     switchEndereco.disabled = true;
   }
@@ -893,7 +1082,6 @@ function seleciona_tomador() {
     document.getElementById("tomadorPais").className = "form-control";
   }
 }
-
 
 function preencherDadosOnChange(checkbox) {
   if (checkbox.checked) {
@@ -935,84 +1123,3 @@ function scrollToElement(id) {
   }
 }
 
-function validaCEP(cep) {
-  // Remove todos os caracteres que não são dígitos
-  cep = cep.replace(/\D/g, '');
-  
-  // Verifica se o CEP tem exatamente 8 dígitos
-  if (cep.length === 8) {
-      return true;
-  }
-  return false;
-}
-
-function validaCNPJ(cnpj) {
-  // Retira todos os caracteres especiais
-  cnpj = cnpj.replace(/[^\d]+/g, '');
-
-  // Verifica o tamanho do cnpj para conter 14 digitos exatos
-  if (cnpj.length !== 14) return false;
-
-  let soma = 0;
-  let resto;
-  const pesos1 = [5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2];
-  const pesos2 = [6, 5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2];
-
-  // Validação do primeiro dígito verificador
-  for (let i = 0; i < 12; i++) {
-      soma += cnpj[i] * pesos1[i];
-  }
-  resto = soma % 11;
-  if (resto < 2) {
-      if (cnpj[12] !== '0') return false;
-  } else {
-      if (cnpj[12] !== (11 - resto).toString()) return false;
-  }
-
-  // Validação do segundo dígito verificador
-  soma = 0;
-  for (let i = 0; i < 13; i++) {
-      soma += cnpj[i] * pesos2[i];
-  }
-  resto = soma % 11;
-  if (resto < 2) {
-      if (cnpj[13] !== '0') return false;
-  } else {
-      if (cnpj[13] !== (11 - resto).toString()) return false;
-  }
-
-  return true;
-}
-
-function validarCPF(cpf) {
-  // Remove caracteres não numéricos
-  cpf = cpf.replace(/[^\d]+/g, '');
-
-  // Verifica se o CPF tem 11 dígitos
-  if (cpf.length !== 11) {
-      return false;
-  }
-
-  // Verifica se todos os dígitos são iguais (caso típico de CPF inválido)
-  if (/^(\d)\1{10}$/.test(cpf)) {
-      return false;
-  }
-
-  // Função para calcular um dos dígitos verificadores
-  function calcularDigito(cpf, pesoInicial) {
-      let soma = 0;
-      for (let i = 0; i < cpf.length; i++) {
-          soma += parseInt(cpf.charAt(i)) * (pesoInicial - i);
-      }
-      let resto = soma % 11;
-      return (resto < 2) ? 0 : 11 - resto;
-  }
-
-  // Calcula o primeiro dígito verificador
-  let digito1 = calcularDigito(cpf.substring(0, 9), 10);
-  // Calcula o segundo dígito verificador
-  let digito2 = calcularDigito(cpf.substring(0, 9) + digito1, 11);
-
-  // Verifica se os dígitos calculados são iguais aos fornecidos
-  return digito1 === parseInt(cpf.charAt(9)) && digito2 === parseInt(cpf.charAt(10));
-}
