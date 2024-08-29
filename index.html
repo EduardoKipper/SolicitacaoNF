@@ -5,13 +5,14 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Formulário de Nota Fiscal</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
-    integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
   <script src="index.js"></script>
   <link rel="stylesheet" href="style.css">
 
-<body onload="document.getElementById('checkbox_preencher')">
+<body onload="limparCampos(), limparAssinatura(), mostrarModal('modalAssinatura')">
   <div class="container">
     <table class='table'>
       <tr>
@@ -21,10 +22,47 @@
         <td><img src="logo.png" alt="Logo da empresa" class="img-fluid"></td>
       </tr>
     </table>
+
+    <!-- Modal assinatura -->
+
+    <div class="modal fade" id="modalAssinatura" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="modalAssinatura" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="modalNomeHotelInvalidoLabel">Bem vindo!</h5>
+          </div>
+          <div class="modal-body">
+            <div class="form-group">
+              <label for="nomeAssinatura" class="form-label"><b>*</b>Seu nome:</label>
+              <input type="text" class="obrigatorio  form-control"
+                placeholder="Digite aqui o seu nome" id="nomeAssinatura">
+            </div>
+            <div class="form-group">
+              <label for="funcao" class="form-label"><b>*</b>Sua função:</label>
+              <select class="form-select" id="funcao" name="funcao">
+                <option value="" disabled selected>Selecione sua função</option>
+                <option value="Auxiliar Financeiro">Auxiliar Financeiro</option>
+                <option value="Finaceiro Sênior">Finaceiro Sênior</option>
+                <option value="Analista Financeiro">Analista Financeiro</option>
+                <option value="Gerente Financeiro">Gerente Financeiro</option>
+                <option value="Recepcionista - Hotel">Recepcionista - Hotel</option>
+                <option value="Gerente Operacional - Hotel">Gerente Operacional - Hotel</option>
+              </select>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-primary" onclick="validarDadosAssinatura()">Próximo</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <div class="container">
       <form id="formDadosHotel" onsubmit="imprime()">
-        <h3 class="mt-5 mb-3">Dados do Hotel</h3>
-
+        <div class="d-flex justify-content-between mt-5">
+          <h3 class="mb-3">Dados do Hotel</h3>
+          <button type="button" class="btn btn-light" id="gerar-pdf" onclick="limparCampos()">Limpar Campos</button>
+        </div>
         <div class="form-group">
           <label for="hotel" class="form-label"><b>*</b>Hotel:</label>
           <select class="form-select" id="hotel" name="hotel" required onchange="seleciona_tomador(), mostrar_endereco()">
@@ -45,7 +83,7 @@
             <option value="Hangar - Belém">Hangar - Belém</option>
             <option value="Lapa - Rio de Janeiro">Lapa - Rio de Janeiro</option>
             <option value="LG INN - Recife">LG INN - Recife</option>
-            <option value="Luxor - Terezina">Luxor - Terezina</option>
+            <option value="Luxor - Teresina">Luxor - Teresina</option>
             <option value="Mar Hotel - Salvador">Mar Hotel - Salvador</option>
             <option value="Mercado - Curitiba">Mercado - Curitiba</option>
             <option value="Navegantes - Recife">Navegantes - Recife</option>
@@ -67,7 +105,7 @@
         <h3 class="mt-5 mb-5">Nota será Emitida para:</h3>
 
         <select class="form-select" aria-label="Default select example" id="select_tomador"
-          onchange="formataDocumento(document.getElementById('tomadorDocumento')), seleciona_tomador(), mostrar_endereco()">
+          onchange="formatServiceTakerDoc(document.getElementById('tomadorDocumento')), seleciona_tomador(), mostrar_endereco()">
           <option value="Pessoa Física">Pessoa Física</option>
           <option value="Pessoa Jurídica">Pessoa Jurídica</option>
           <option value="Hospede Extrangeiro">Extrangeiro</option>
@@ -77,7 +115,7 @@
 
         <div class="form-group">
           <label for="tomadorDocumento" class="form-label"><b>*</b>Documento:</label>
-          <input id="tomadorDocumento"  onblur="formataDocumento(this)" oninput="proibeString(event), preencherDadosOnChange(document.getElementById('checkbox_preencher'))" maxlength="18" type="text" class="form-control"
+          <input id="tomadorDocumento"  onblur="formatServiceTakerDoc(this)" oninput="proibeString(event), preencherDadosOnChange(document.getElementById('checkbox_preencher'))" maxlength="18" type="text" class="form-control"
             placeholder="Digite o documento do tomador" required>
         </div>
 
@@ -99,7 +137,7 @@
         <div id="endereco" style="display: none;">
           <div class="form-group">
             <label for="tomadorCep" class="form-label"><b>*</b>CEP:</label>
-            <input onblur="buscarEnderecoPorCep(this)" oninput="proibeString(event)" type="text" maxlength="10" class="form-control" id="tomadorCep" placeholder="Digite o CEP" >
+            <input onblur="getCep(this)" oninput="proibeString(event)" type="text" maxlength="10" class="form-control" id="tomadorCep" placeholder="Digite o CEP" >
           </div>
 
           <div class="form-group">
@@ -111,7 +149,7 @@
 
             <div class="form-group col">
               <label for="tomadorNumero" class="form-label">Número:</label>
-              <input type="text" class="form-control" id="tomadorNumero" oninput="proibeString(event)" placeholder="Digite o endereço">
+              <input type="text" class="form-control" id="tomadorNumero" placeholder="Digite o endereço">
             </div>
 
             <div class="form-group col">
@@ -148,12 +186,12 @@
         <div class="form-group">
           <label for="tomadorEmail" class="form-label"><b>*</b>Email:</label>
           <input type="text" email class="obrigatorio form-control" id="tomadorEmail"
-            placeholder="Digite o email para contato" >
+            placeholder="Digite o email para contato" onblur="validarEmail(this.value)" oninput="proibeSpace(event)">
         </div>
 
         <div class="form-group">
           <label for="tomadorTelefone" class="form-label">Telefone:</label>
-          <input type="text" onblur="formataTelefone(this)" oninput="proibeString(event)" class="form-control" id="tomadorTelefone"
+          <input type="text" onblur="formatPhone(this)" oninput="proibeString(event)" class="form-control" id="tomadorTelefone"
             placeholder="Digite o telefone para contato (Whatsapp)">
         </div>
 
@@ -173,7 +211,7 @@
 
         <div class="form-group">
           <label for="hospedeCpf" class="form-label"><b>*</b>Documento do Hóspede:</label>
-          <input type="text" onblur="formataDocumento(this)" oninput="proibeString(event)" class="obrigatorio form-control" maxlength="14" placeholder="Digite o CPF do hóspede"
+          <input type="text" onblur="formatServiceTakerDoc(this)" oninput="proibeString(event)" class="obrigatorio form-control" maxlength="14" placeholder="Digite o CPF do hóspede"
             id="hospedeCpf" disabled >
         </div>
 
@@ -197,13 +235,13 @@
             <div class="modal-content border-danger">
               <div class="modal-header bg-danger text-white">
                 <h5 class="modal-title" id="modalNomeHotelInvalidoLabel">Erro</h5>
-                <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
               </div>
               <div class="modal-body">
-                Insira o nome do hotel da hospedagem.
+                Selecione o hotel da hospedagem.
               </div>
               <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
               </div>
             </div>
           </div>
@@ -215,13 +253,13 @@
             <div class="modal-content border-danger">
               <div class="modal-header bg-danger text-white">
                 <h5 class="modal-title" id="modalDocumentoTomadorInvalidoLabel">Erro</h5>
-                <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
               </div>
               <div class="modal-body">
                 Insira o Documento do Tomador de Serviços.
               </div>
               <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
               </div>
             </div>
           </div>
@@ -233,13 +271,13 @@
             <div class="modal-content border-danger">
               <div class="modal-header bg-danger text-white">
                 <h5 class="modal-title" id="modalCpfCnpjInvalidoLabel">Erro</h5>
-                <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
               </div>
               <div class="modal-body">
                 Informe um CPF ou CNPJ válido.
               </div>
               <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
               </div>
             </div>
           </div>
@@ -251,13 +289,13 @@
             <div class="modal-content border-danger">
               <div class="modal-header bg-danger text-white">
                 <h5 class="modal-title" id="modalRazaoSocialInvalidaLabel">Erro</h5>
-                <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
               </div>
               <div class="modal-body">
                 Insira o Nome ou Razão Social do Tomador de Serviços.
               </div>
               <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
               </div>
             </div>
           </div>
@@ -269,13 +307,13 @@
             <div class="modal-content border-danger">
               <div class="modal-header bg-danger text-white">
                 <h5 class="modal-title" id="modalEnderecoInvalidoLabel">Erro</h5>
-                <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
               </div>
               <div class="modal-body">
                 Insira um endereço válido para o Tomador de Serviços.
               </div>
               <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
               </div>
             </div>
           </div>
@@ -287,13 +325,13 @@
             <div class="modal-content">
               <div class="modal-header bg-danger text-white">
                 <h5 class="modal-title" id="modalEmailInvalidoLabel">OPS... Não</h5>
-                <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
               </div>
               <div class="modal-body">
                 O e-mail informado é inválido. Verifique se o formato está correto.
               </div>
               <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
               </div>
             </div>
           </div>
@@ -305,13 +343,13 @@
             <div class="modal-content border-danger">
               <div class="modal-header bg-danger text-white">
                 <h5 class="modal-title" id="modalCpfHospedeInvalidoLabel">Erro</h5>
-                <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
               </div>
               <div class="modal-body">
                 Informe um CPF válido para o hóspede.
               </div>
               <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
               </div>
             </div>
           </div>
@@ -323,13 +361,13 @@
             <div class="modal-content border-danger">
               <div class="modal-header bg-danger text-white">
                 <h5 class="modal-title" id="modalNomeHospedeInvalidoLabel">Erro</h5>
-                <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
               </div>
               <div class="modal-body">
                 Insira o Nome ou Razão Social do hóspede.
               </div>
               <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
               </div>
             </div>
           </div>
@@ -341,13 +379,13 @@
             <div class="modal-content border-danger">
               <div class="modal-header bg-danger text-white">
                 <h5 class="modal-title" id="modalNumeroEstadasInvalidoLabel">Erro</h5>
-                <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
               </div>
               <div class="modal-body">
                 Nenhuma estada armazenada.
               </div>
               <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
               </div>
             </div>
           </div>
@@ -359,13 +397,13 @@
             <div class="modal-content">
               <div class="modal-header bg-danger text-white">
                 <h5 class="modal-title" id="modalValorTotalInvalidoLabel">OPS... Não</h5>
-                <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
               </div>
               <div class="modal-body">
                 O valor total da nota fiscal deve ser maior que 0. Verifique o valor informado.
               </div>
               <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
               </div>
             </div>
           </div>
@@ -377,27 +415,25 @@
 
         <!-- Link para abrir o modal -->
         <div class="d-grid">
-          <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalEstada">Adicionar Estada</button>
+          <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#modalEstada">
+            Adicionar Estada
+          </button>
         </div>
 
-        <div class="modal fade" id="modalEstada" tabindex="-1" role="dialog" aria-labelledby="modalEstadaLabel" aria-hidden="true">
-          <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
-            
+        <!-- Modal -->
+        <div class="modal fade" id="modalEstada" tabindex="-1" aria-labelledby="modalEstadaLabel" aria-hidden="true">
+          <div class="modal-dialog modal-lg modal-dialog-centered">
             <div class="modal-content">
-
               <div class="modal-header">
                 <h5 class="modal-title" id="modalEstadaLabel">Adicionar Estada</h5>
-                <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
               </div>
-
               <div class="modal-body">
-                <!-- Aqui vai o seu formulário -->
-
+                <!-- Formulário do modal -->
                 <div class="form-group">
                   <label for="estada" class="form-label"><b>*</b>Nr Estada:</label>
                   <input type="text" class="form-control" placeholder="Digite o número da Estada" id="estada" oninput="proibeString(event)">
                 </div>
-
                 <div class="row">
                   <div class="form-group col-md-6">
                     <label for="checkIn" class="form-label"><b>*</b>Data de Check-in:</label>
@@ -408,64 +444,48 @@
                     <input type="date" class="form-control" id="checkOut" onblur="calcularDiarias()">
                   </div>
                 </div>
-
                 <div class="form-group">
                   <label for="valorDiaria" class="form-label">Valor da Diária:</label>
                   <div class="input-group">
-                    <div class="input-group-prepend">
-                      <span class="input-group-text">R$</span>
-                    </div>
-                    <input type="number" class="form-control formatted-number" id="valorDiaria" placeholder="Digite o valor unitário da(as) diária(as)">
-                    <button type="button" class="btn btn-secondary" title="Adicionar Quarto" onclick="adicionaDiaria()">+</button>
+                    <span class="input-group-text">R$</span>
+                    <!-- Resolver -->
+                    <input type="number" class="form-control formatted-number" id="valorDiaria" placeholder="Digite o valor unitário da(as) diária(as)" >
+                    <button type="button" class="btn btn-secondary" title="Adicionar Quarto" onclick="adicionaDiaria()" >+</button>
                   </div>
                   <div id="diariasExtras"></div>
                 </div>
-
-                <br>
-
                 <div class="form-group">
                   <label for="quantidadeDiarias" class="form-label">Quantidade de Diárias:</label>
                   <input type="number" class="form-control" placeholder="Quantidade de diárias" id="quantidadeDiarias" readonly>
                 </div>
-
                 <div class="form-group">
                   <label for="estacionamento" class="form-label">Valor total do Estacionamento:</label>
                   <div class="input-group">
-                    <div class="input-group-prepend">
-                      <span class="input-group-text">R$</span>
-                    </div>
+                    <span class="input-group-text">R$</span>
                     <input type="number" class="form-control formatted-number" placeholder="Valor total do Estacionamento" id="estacionamento">
                   </div>
                 </div>
-
                 <div class="form-group">
                   <label for="consumo" class="form-label">Valor total do Consumo:</label>
                   <div class="input-group">
-                    <div class="input-group-prepend">
-                      <span class="input-group-text">R$</span>
-                    </div>
+                    <span class="input-group-text">R$</span>
                     <input type="number" class="form-control formatted-number" placeholder="Valor total do Consumo" id="consumo">
                   </div>
                 </div>
-
                 <div class="form-check">
                   <br>
                   <input type="checkbox" class="form-check-input" id="checkbox_dividirNota" onchange="mostrarCampoDividirNota()">
                   <label class="form-check-label" for="checkbox_dividirNota">Dividir valor total da estada</label>
                 </div>
-
                 <div id="dividirNota" style="display: none;">
                   <label for="numeroHospedes" class="form-label">Número de Hóspedes:</label>
                   <input type="number" class="form-control" id="numeroHospedes" placeholder="Digite a quantidade de hóspedes para dividir o valor da estada">
                 </div>
-
               </div>
-
               <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
                 <button type="button" class="btn btn-primary" onclick="armazenarDadosHospedagem()">Salvar Dados da estada</button>
               </div>
-
             </div>
           </div>
         </div>
@@ -476,13 +496,13 @@
             <div class="modal-content border-danger">
               <div class="modal-header bg-danger text-white">
                 <h5 class="modal-title" id="modalEstadaInvalidaLabel">Erro</h5>
-                <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
               </div>
               <div class="modal-body">
                 Por favor, insira uma estada válida.
               </div>
               <div class="modal-footer">
-                <button type="button" class="btn btn-danger" data-dismiss="modal">Fechar</button>
+                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Fechar</button>
               </div>
             </div>
           </div>
@@ -494,13 +514,13 @@
             <div class="modal-content border-danger">
               <div class="modal-header bg-danger text-white">
                 <h5 class="modal-title" id="modalDatasInvalidasLabel">Erro</h5>
-                <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
               </div>
               <div class="modal-body">
                 Por favor, preencha as datas de check-in e check-out.
               </div>
               <div class="modal-footer">
-                <button type="button" class="btn btn-danger" data-dismiss="modal">Fechar</button>
+                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Fechar</button>
               </div>
             </div>
           </div>
@@ -512,14 +532,14 @@
             <div class="modal-content border-danger">
               <div class="modal-header bg-danger">
                 <h5 class="modal-title" id="modalValoresInvalidosLabel">Erro</h5>
-                <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
               </div>
               <div class="modal-body">
                 <p>O valor total da estada deve ser maior que 0.</p>
                 <p>Preencha ao menos um valor.</p>
               </div>
               <div class="modal-footer">
-                <button type="button" class="btn btn-danger" data-dismiss="modal">Fechar</button>
+                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Fechar</button>
               </div>
             </div>
           </div>
@@ -531,13 +551,13 @@
             <div class="modal-content border-danger">
               <div class="modal-header bg-danger text-white">
                 <h5 class="modal-title" id="modalValoresNegativosLabel">Erro</h5>
-                <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
               </div>
               <div class="modal-body">
                 Os valores não podem ser negativos.
               </div>
               <div class="modal-footer">
-                <button type="button" class="btn btn-danger" data-dismiss="modal">Fechar</button>
+                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Fechar</button>
               </div>
             </div>
           </div>
@@ -549,13 +569,13 @@
             <div class="modal-content border-danger">
               <div class="modal-header bg-danger text-white">
                 <h5 class="modal-title" id="modalNumeroHospedesInvalidoLabel">Erro</h5>
-                <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
               </div>
               <div class="modal-body">
                 Número de hóspedes não pode ser menor que 1.
               </div>
               <div class="modal-footer">
-                <button type="button" class="btn btn-danger" data-dismiss="modal">Fechar</button>
+                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Fechar</button>
               </div>
             </div>
           </div>
@@ -567,13 +587,13 @@
             <div class="modal-content">
               <div class="modal-header bg-danger text-white">
                 <h5 class="modal-title" id="modalDatasInvalidasLabel">Erro</h5>
-                <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
               </div>
               <div class="modal-body">
                 Por favor, insira datas válidas.
               </div>
               <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
               </div>
             </div>
           </div>
@@ -585,13 +605,13 @@
             <div class="modal-content">
               <div class="modal-header bg-danger text-white">
                 <h5 class="modal-title" id="modalDiferencaNegativaLabel">Erro</h5>
-                <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
               </div>
               <div class="modal-body">
                 A diferença entre as diárias não pode ser menor que 1 dia.
               </div>
               <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
               </div>
             </div>
           </div>
@@ -608,8 +628,8 @@
                 O valor das diárias ultrapassou 30 dias. deseja continuar.
               </div>
               <div class="modal-footer">
-                <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="recusarDiarias()">Recusar</button>
-                <button type="button" class="btn btn-primary" data-dismiss="modal">Aceitar</button>
+                <button type="button" class="btn btn-danger" data-bs-dismiss="modal" onclick="recusarDiarias()">Recusar</button>
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Aceitar</button>
               </div>
             </div>
           </div>
@@ -621,13 +641,13 @@
             <div class="modal-content">
               <div class="modal-header bg-success text-light">
                 <h5 class="modal-title" id="modalEstadaSalvaLabel">Sucesso</h5>
-                <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
               </div>
               <div class="modal-body">
                 A estada foi salva com sucesso!
               </div>
               <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
                 <!-- Adicione um botão adicional aqui, se necessário -->
                 <!-- <button type="button" class="btn btn-primary">Outra Ação</button> -->
               </div>
@@ -669,9 +689,11 @@
         <br>
 
         <div class="d-grid">
-          <button type="button" class="btn btn-primary" id="gerar-pdf" onclick="imprime()" disabled>Salvar Solicitação</button>
+          <button type="button" class="btn btn-primary" id="gerar-pdf" onclick="imprime()">Salvar Solicitação</button>
+          <br>
+          <button type="button" class="btn btn-light" id="gerar-pdf" onclick="limparCampos()">Limpar Campos</button>
         </div>
-
+        
         <br>
         <br>
       </form>
@@ -680,45 +702,30 @@
 
 
   </div>
-  <script>
-// Função para formatar número com duas casas decimais
-function formatarNumero(input) {
-  let value = input.value.replace(',', '.'); // Substitui a vírgula por ponto para conversão correta
-  let floatValue = parseFloat(value);
-  if (!isNaN(floatValue)) {
-    input.value = floatValue.toFixed(2); // Formata com duas casas decimais e substitui ponto por vírgula
-  }
-}
 
-// Evento de blur para formatar número ao sair do campo
-document.addEventListener('blur', function (event) {
-  const target = event.target;
-  if (target.classList.contains('formatted-number')) {
-    formatarNumero(target);
-  }
-}, true); // Captura eventos na fase de propagação
-
-// Evento de input para limitar o número de casas decimais enquanto o usuário digita
-document.addEventListener('input', function (event) {
-  const target = event.target;
-  if (target.classList.contains('formatted-number')) {
-    let value = target.value.replace(',', '.');
-    let parts = value.split('.');
-
-    if (parts.length > 1 && parts[1].length > 2) {
-      target.value = parseFloat(value).toFixed(2).replace('.', ',');
-    }
-  }
-});
-
-</script>
-
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-    integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
-    crossorigin="anonymous"></script>
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
+
+<script>
+  // Evento de blur para formatar número ao sair do campo
+  document.addEventListener('blur', function (event) {
+    const target = event.target;
+    if (target.classList.contains('formatted-number')) {
+      returnCurrencyFormat(target.id);
+    }
+  }, true); // Captura eventos na fase de propagação
+  
+  // Evento de input para limitar o número de casas decimais enquanto o usuário digita
+  document.addEventListener('input', function (event) {
+    const target = event.target;
+    if (target.classList.contains('formatted-number')) {
+      let value = target.value.replace(',', '.');
+      let parts = value.split('.');
+  
+      if (parts.length > 1 && parts[1].length > 2) {
+        target.value = parseFloat(value).toFixed(2).replace('.', ',');
+      }
+    }
+  });
+</script>
 
 </html>
