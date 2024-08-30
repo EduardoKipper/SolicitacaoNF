@@ -84,9 +84,9 @@ function returnBrasilianDate(data) {
 // Função para formatar número como moeda (duas casas decimais)
 function returnCurrencyFormat(id) {
   let input = document.getElementById(id)
-  let formatedValue = input.value.replace(',', '.'); // Substitui a vírgula por ponto para conversão correta
-  let floatValue = parseFloat(formatedValue);
-  input.value = floatValue.toFixed(2).replace('.', ','); // Formata com duas casas decimais e substitui ponto por vírgula
+  let value = parseFloat(input.value)
+  value = value.toFixed(2)
+  input.value = value
 }
 // Função que não permite a entrada de uma string no input
 function proibeString(event) {
@@ -739,10 +739,17 @@ function editarHospedagem(id) {
   const dados = dadosHospedagemArmazenados.find(dados => dados.id === id);
 
   if (dados) {
+    let valorDiaria = dados.valorDiarias[0];
+    let valorEstacionamento = dados.valorEstacionamento
+    let valorConsumo = dados.valorConsumo
+    
     document.getElementById('estada').value = dados.estada;
     document.getElementById('checkIn').value = dados.checkIn.trim().split('/').reverse().join('-');
     document.getElementById('checkOut').value = dados.checkOut.trim().split('/').reverse().join('-');
-    document.getElementById('valorDiaria').value = dados.valorDiarias[0].toFixed(2).replace('.', ','); // Apenas o primeiro valor
+    document.getElementById('valorDiaria').value = parseFloat(valorDiaria).toFixed(2); // Apenas o primeiro valor
+    document.getElementById('quantidadeDiarias').value = dados.quantidadeDiarias;
+    document.getElementById('estacionamento').value = parseFloat(valorEstacionamento).toFixed(2)
+    document.getElementById('consumo').value = parseFloat(valorConsumo).toFixed(2)
 
     // Verifica se há mais de um valor de diária antes de adicionar os campos das diárias extras
     if (dados.valorDiarias.length > 1) {
@@ -764,7 +771,7 @@ function editarHospedagem(id) {
         input.type = 'number';
         input.className = 'form-control formatted-number';
         input.placeholder = 'Digite o valor unitário da diária';
-        input.value = valor.toFixed(2).replace('.', ',');
+        input.value = parseFloat(valor).toFixed(2)
 
         const button = document.createElement('button');
         button.type = 'button';
@@ -788,10 +795,7 @@ function editarHospedagem(id) {
       document.getElementById('numeroHospedes').value = dados.divididoPor;
     }
 
-    // Preencher os demais campos
-    document.getElementById('quantidadeDiarias').value = dados.quantidadeDiarias;
-    document.getElementById('estacionamento').value = dados.valorEstacionamento.toFixed(2).replace('.', ',');
-    document.getElementById('consumo').value = dados.valorConsumo.toFixed(2).replace('.', ',');
+
 
     // Remover a hospedagem atual da lista para que possa ser atualizada
     dadosHospedagemArmazenados = dadosHospedagemArmazenados.filter(dados => dados.id !== id);
