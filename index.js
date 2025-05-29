@@ -43,7 +43,7 @@ function formatServiceTakerDoc(input) {
     formatCnpj(input)
   }
   documentoHospede = document.getElementById('hospedeCpf').value
-  if (tipoTomador != "Hospede Extrangeiro") {
+  if (tipoTomador != "Hospede Estrangeiro") {
     formatCpf(document.getElementById('hospedeCpf'))
   }
 }
@@ -261,7 +261,7 @@ function validarDadosSolicitacao(dados) {
       return false;
     }
 
-    if (tipoTomador === "Hospede Extrangeiro" && !validarCampo('tomadorPais', tomadorPais)) {
+    if (tipoTomador === "Hospede Estrangeiro" && !validarCampo('tomadorPais', tomadorPais)) {
       scrollToElement('tomadorPais');
       new bootstrap.Modal(document.getElementById('modalEnderecoInvalido')).show();
       return false;
@@ -276,7 +276,7 @@ function validarDadosSolicitacao(dados) {
   }
 
   // Valida o CPF do hóspede
-  if (tipoTomador != "Hospede Extrangeiro"){
+  if (tipoTomador != "Hospede Estrangeiro"){
     if (!validarCampo('hospedeCpf', hospedeCpf) || !validarCPF(hospedeCpf)) {
       scrollToElement('hospedeCpf');
       new bootstrap.Modal(document.getElementById('modalCpfHospedeInvalido')).show();
@@ -909,7 +909,7 @@ function imprime() {
         <td></td>
         <td class="align-middle" width="70%"><h3>Solicitação de Nota Fiscal</h3></td>
         <td></td>
-        <td><img src="logo.png" alt="Logo da Empresa" class="img-fluid"></td>
+        <td><img src="logo.png" alt="Logo da Empresa" class="img-fluid" width="50px"></td>
       </tr>
     </table>
     <table class='table'>
@@ -961,7 +961,7 @@ function imprime() {
           <td style='border:solid windowtext .5pt' width='10%'>ESTADO:</td>
           <th style='border:solid windowtext .5pt'><span>${tomadorEstado}</span></th>
         </tr>
-        ${tipoTomador === "Hospede Extrangeiro" ? `
+        ${tipoTomador === "Hospede Estrangeiro" ? `
           <tr>
             <td style='border:solid windowtext .5pt'>PAIS:</td>
             <th style='border:solid windowtext .5pt' colspan="3"><span>${tomadorPais}</span></th>
@@ -1045,40 +1045,23 @@ function seleciona_tomador() {
   var selector = document.getElementById("select_tomador");
   var switchEndereco = document.getElementById("checkbox_endereco");
   var checkboxUsarDados = document.getElementById('checkbox_preencher');
-  var hotel = document.getElementById("hotel").value;
 
-  if (selector.value === "Hospede Extrangeiro") {
-    switchEndereco.checked = true;
-    switchEndereco.disabled = true;
-  } else if (selector.value === "Pessoa Jurídica") {
-    switchEndereco.disabled = true;
-    switchEndereco.checked = true;
+  if (selector.value === "Pessoa Jurídica") {
     checkboxUsarDados.checked = false;
     checkboxUsarDados.disabled = true;
     preencherDadosOnChange(checkboxUsarDados);
   } else {
-    switchEndereco.checked = false;
-    switchEndereco.disabled = false;
     checkboxUsarDados.checked = true;
     checkboxUsarDados.disabled = false;
     preencherDadosOnChange(checkboxUsarDados);
   }
+  switchEndereco.checked = true;
+  switchEndereco.disabled = true;
 
-  // Verifica se o hotel selecionado está em Florianópolis e o tomador é Pessoa Física
-  if (hotel.includes("Florianópolis") 
-    || hotel.includes("Belém") 
-    || hotel.includes("Teresina") 
-    || hotel.includes("Rio de Janeiro") 
-    || hotel.includes("Belo Horizonte") 
-    || hotel.includes("João Pessoa") 
-    || hotel.includes("Fóz do Iguaçu")) {
-    switchEndereco.checked = true;
-    switchEndereco.disabled = true;
-  }
 
   // Mostra ou esconde o campo de país para tomador estrangeiro
   var campoPais = document.getElementById('pais');
-  if (selector.value === "Hospede Extrangeiro") {
+  if (selector.value === "Hospede Estrangeiro") {
     campoPais.style.display = "block";
     document.getElementById("tomadorPais").className = "obrigatorio form-control";
   } else {

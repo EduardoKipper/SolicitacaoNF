@@ -15,11 +15,10 @@
 <body onload="limparCampos(), limparAssinatura(), mostrarModal('modalAssinatura')">
   <div class="container">
     <table class='table'>
-      <tr>
-        <td></td>
-        <td class="align-middle" width="70%"><h3>Solicitação de Nota Fiscal</h3></td>
-        <td></td>
-        <td><img src="logo.png" alt="Logo da empresa" class="img-fluid"></td>
+      <tr class="align-middle">
+        <td><img src="logo.png" alt="Logo da empresa" class="img-fluid" width="50px"></td>
+        <td><h3>Rede Andrade</h3></td>
+        <td class="text-end" width="70%"><a href="" class="active">Formulário NF</a></td>
       </tr>
     </table>
 
@@ -33,22 +32,23 @@
           </div>
           <div class="modal-body">
             <div class="form-group">
-              <label for="nomeAssinatura" class="form-label"><b>*</b>Seu nome (funcionário):</label>
+              <label for="nomeAssinatura" class="form-label"><b>*</b>Seu nome(Funcionário):</label>
               <input type="text" class="obrigatorio  form-control"
                 placeholder="Digite aqui o seu nome" id="nomeAssinatura">
             </div>
             <div class="form-group">
-              <label for="funcao" class="form-label"><b>*</b>Sua função (cargo):</label>
+              <label for="funcao" class="form-label"><b>*</b>Sua função(Cargo):</label>
               <select class="form-select" id="funcao" name="funcao">
                 <option value="" disabled selected>Selecione sua função</option>
                 <option value="Auxiliar Financeiro">Auxiliar Financeiro</option>
                 <option value="Finaceiro Sênior">Finaceiro Sênior</option>
                 <option value="Analista Financeiro">Analista Financeiro</option>
                 <option value="Gerente Financeiro">Gerente Financeiro</option>
-                <option value="Agente Comercial">Agente Comercial</option>
-                <option value="Gerente Comercial">Gerente Comercial</option>
-                <option value="Recepcionista - Hotel">Recepcionista - Hotel</option>
-                <option value="Gerente Operacional - Hotel">Gerente Operacional - Hotel</option>
+                <!-- <option value="Recepcionista - Hotel">Recepcionista - Hotel</option> -->
+                <!-- <option value="Gerente Operacional - Hotel">Gerente Operacional - Hotel</option> -->
+                <!-- <option value="Agente Comercial">Agente Comercial</option> -->
+                <!-- <option value="Agente Comercial Sênior">Agente Comercial Sênior</option> -->
+                <!-- <option value="Gerente Comercial">Gerente Comercial</option> -->
               </select>
             </div>
           </div>
@@ -72,12 +72,17 @@
             <option value="Amazônia - Manaus">Amazônia - Manaus</option>
             <option value="Barra - Salvador">Barra - Salvador</option>
             <option value="Bello Mare - Natal">Bello Mare - Natal</option>
+            <option value="Boa Viagem - Recife">Boa Viagem - Recife</option>
             <option value="Braz - Curitiba">Braz - Curitiba</option>
             <option value="Canadá - Rio de Janeiro">Canadá - Rio de Janeiro</option>
+            <option value="Casa Blanca - Fortaleza">Casa Blanca - Fortaleza</option>
             <option value="Cecomtur - Florianópolis">Cecomtur - Florianópolis</option>
             <option value="Comfort - Natal">Comfort - Natal</option>
+            <option value="Coimbra - Fortaleza">Coimbra - Fortaleza</option>
             <option value="CWB - Curitiba">CWB - Curitiba</option>
             <option value="Docas - Belém">Docas - Belém</option>
+            <option value="Estrela Centro - Porto Seguro">Estrela Centro - Porto Seguro</option>
+            <option value="Estrela Praia - Porto Seguro">Estrela Praia - Porto Seguro</option>
             <option value="Express - Salvador">Express - Salvador</option>
             <option value="Floph - Florianópolis">Floph - Florianópolis</option>
             <option value="Goiânia - Goiânia">Goiânia - Goiânia</option>
@@ -89,15 +94,20 @@
             <option value="Mar Hotel - Salvador">Mar Hotel - Salvador</option>
             <option value="Mercado - Curitiba">Mercado - Curitiba</option>
             <option value="Navegantes - Recife">Navegantes - Recife</option>
-            <option value="Ondina - Salvador">Ondina - Salvador</option>
             <option value="Onda Mar - Recife">Onda Mar - Recife</option>
+            <option value="Ondina - Salvador">Ondina - Salvador</option>
             <option value="Pampulha - Belo Horizonte">Pampulha - Belo Horizonte</option>
+            <option value="Piratininga - São Paulo">Piratininga - São Paulo</option>
             <option value="Plaza Recife - Recife">Plaza Recife - Recife</option>
             <option value="Plaza Salvador - Salvador">Plaza Salvador - Salvador</option>
+            <option value="Porto Center - Porto Seguro">Porto Center - Porto Seguro</option>
+            <option value="Rio Branco - Rio Branco">Rio Branco - Rio Branco</option>
             <option value="Rivieira - Salvador">Rivieira - Salvador</option>
             <option value="San Martin - Curitiba">San Martin - Curitiba</option>
             <option value="São Francisco - Curitiba">São Francisco - Curitiba</option>
+            <option value="SLZ - São Luiz">SLZ - São Luiz</option>
             <option value="Sol Mar - João Pessoa">Sol Mar - João Pessoa</option>
+            <option value="Terra Brasil - Porto Seguro">Terra Brasil - Porto Seguro</option>
             <option value="Vela Branca - Recife">Vela Branca - Recife</option>
             <option value="Vernon - Curitiba">Vernon - Curitiba</option>
             <option value="Vivaldi - Fóz do Iguaçu">Vivaldi - Fóz do Iguaçu</option>
@@ -110,7 +120,7 @@
           onchange="formatServiceTakerDoc(document.getElementById('tomadorDocumento')), seleciona_tomador(), mostrar_endereco()">
           <option value="Pessoa Física">Pessoa Física</option>
           <option value="Pessoa Jurídica">Pessoa Jurídica</option>
-          <option value="Hospede Extrangeiro">Extrangeiro</option>
+          <option value="Hospede Estrangeiro">Estrangeiro</option>
         </select>
 
         <br>
